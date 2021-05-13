@@ -28,9 +28,10 @@ public class ValidatorRoute extends RouteBuilder {
           // we store on exchange body all the data we are interested in
           .process(processCsv).marshal().json(JsonLibrary.Gson)
           .log("${body}")
-          .to("mock:isValid")
+          .to("json-validator:{{json.schema.uri}}")
           // Write some log to know it finishes properly
-          .log("Information stored on RHOSAK");
+          .log("${body}")
+          .log("Information stored");
     }
   
     private final class CSVProcessor implements Processor {
@@ -43,13 +44,9 @@ public class ValidatorRoute extends RouteBuilder {
   
         if (body != null) {
   
-          res.put("orderNumber", extractValue(exchange, body, "ORDERNUMBER"));
-          res.put("orderDate", new SimpleDateFormat("MM/dd/yyyy").parse(extractValue(exchange, body, "ORDERDATE")));
-          res.put("status", extractValue(exchange, body, "STATUS"));
-          res.put("customerName", extractValue(exchange, body, "CUSTOMERNAME"));
-          res.put("dealSize", extractValue(exchange, body, "DEALSIZE"));
-          res.put("amount", Double.parseDouble(extractValue(exchange, body, "SALES")));
-          res.put("productline", extractValue(exchange,body, "PRODUCTLINE"));
+          res.put("firstName", extractValue(exchange, body, "FIRSTNAME"));
+          res.put("lastName", extractValue(exchange, body, "LASTNAME"));
+          res.put("age", Integer.parseInt(extractValue(exchange, body, "AGE")));
   
           exchange.getIn().setBody(res);
         }
