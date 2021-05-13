@@ -46,7 +46,8 @@
                 65
             ],
             "title": "The age schema",
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
         }
     },
     "additionalProperties": true
